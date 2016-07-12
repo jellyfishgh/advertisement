@@ -1,0 +1,25 @@
+{
+  "name": "advertisement",
+  "version": "1.0.0",
+  "description": "advertisement on start page of app powered by local h5 page and webview",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jellyfishgh/advertisement.git"
+  },
+  "keywords": [
+    "h5",
+    "webview",
+    "hybrid"
+  ],
+  "author": "jellyfishgh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jellyfishgh/advertisement/issues"
+  },
+  "homepage": "https://github.com/jellyfishgh/advertisement#readme"
+}
