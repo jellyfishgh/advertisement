@@ -1,0 +1,11 @@
+module.exports = {
+    ".html": "text/html",
+    ".css": "text/css",
+    ".js": "application/x-javascript",
+    ".png": "image/png",
+    ".jpg": "image/jpg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".ico": "image/x-icon",
+    ".json": "application/json"
+};
