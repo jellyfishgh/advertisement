@@ -1,26 +1,28 @@
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 const querystring = require('querystring');
 const url = require('url');
 const mime = require('./mime');
 
 const server = http.createServer((req, res) => {
     const urlObj = url.parse(req.url);
-    const path = urlObj.path;
+    const pathname = urlObj.pathname;
     const queryObj = querystring.parse(urlObj.query);
-    console.log(`${path}?${urlObj.query}`);
-    if (path === '/api/advert') {
+    // console.log(`pathname:${pathname}`);
+    // console.log(`query:${urlObj.query}`);
+    if (pathname === '/api/advert') {
         const file = queryObj.source ? queryObj.source : queryObj.img;
-        const extName = file.slice(file.lastIndexof('.'));
-        console.log(extName);        
+        const extName = file.slice(file.lastIndexOf('.'));
+        // console.log(`extName:${extName}`);        
         res.writeHead(200, {
             'Content-Type': mime[extName] ? mime[extName] : 'text/platin'
         });
+        let rr;
         if (queryObj.act === 'get_advert_source' && queryObj.source) {
-            const rr = fs.createReadStream(path.join('public', queryObj.source));
-            rr.pipe(res);
+            rr = fs.createReadStream(path.join('public', queryObj.source));
         } else if (queryObj.act === 'get_advert_image') {
-            const rr = fs.createReadStream(path.join('public', `/${queryObj.game}/${queryObj.resolution}/${queryObj.img}`));
+            rr = fs.createReadStream(path.join('public', `/${queryObj.game}/${queryObj.resolution}/${queryObj.img}`));
         }
         rr.pipe(res);
     } else {
