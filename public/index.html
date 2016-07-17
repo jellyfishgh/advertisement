@@ -1,104 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ad</title>
-    <style>
-    html,
-    body {
-        padding: 0;
-        margin: 0;
-    }
-    
-    body {
-        background-repeat: no-repeat;
-        background-position: center;
-        background-attachment: fixed;
-        background-clip: border-box;
-        background-size: cover;
-    }
-    
-    .sideBar {
-        position: absolute;
-        right: 10%;
-        top: 10%;
-    }
-    </style>
+    <meta charset="UTF-8">
+    <title>index</title>
 </head>
-
 <body>
-    <div class="sideBar">
-        <span id="clock"></span> |
-        <button id="jump">跳过</button>
-    </div>
-    <script>
-    function init(id, size, remain) {
-    	setBg();
-        var clock = document.getElementById("clock");
-        var tnode = document.createTextNode(remain);
-        clock.appendChild(tnode);
-        var intervalId = window.setInterval(function() {
-            remain -= 1;
-            tnode.nodeValue = remain;
-            if (remain <= 0) {
-                window.clearInterval(intervalId);
-                closeMe();
-            }
-        }, 1000);
-
-        function setBg() {
-        	var jsSize = window.screen.width * window.devicePixelRatio + "_" + window.screen.height * window.devicePixelRatio;
-        	console.log(jsSize);
-            var src = id + "/" + jsSize + "/" + "bg.png";
-            document.body.style.backgroundImage = "url(" + src + ")";
-        }
-
-        function closeMe() {
-            // window.location.href = 'ios://closeAd';
-            // alert("test");
-            closeAd();
-            return false;
-        }
-
-        function touchHandler() {
-            window.clearInterval(intervalId);
-            closeMe();
-        }
-        var jumpBtn = document.getElementById("jump");
-        // jumpBtn.onclick = touchHandler;
-        jumpBtn.ontouchend = touchHandler;
-
-        function orientationChange() {
-            switch (window.orientation) {　　
-                case 0:
-                    // alert("肖像模式 0,screen-width: " + screen.width + "; screen-height:" + screen.height);
-                    break;　　
-                case -90:
-                	setBg();
-                    // alert("左旋 -90,screen-width: " + screen.width + "; screen-height:" + screen.height);
-                    break;
-                case 90:
-                	setBg();
-                    // alert("右旋 90,screen-width: " + screen.width + "; screen-height:" + screen.height);
-                    break;
-                case 180:
-                    // alert("风景模式 180,screen-width: " + screen.width + "; screen-height:" + screen.height);
-                    break;
-            }
-        };
-        window.onorientationchange = orientationChange;
-    }
-    var search = window.location.search.slice(1);
-    var queries = search.split("&");
-    var json = {};
-    for (var i = 0; i < queries.length; i++) {
-        var kv = queries[i].split("=");
-        json[kv[0]] = kv[1];
-    }
-    if (json && json.id && json.size && json.remain) init(json.id, json.size, json.remain);
-    </script>
+    <form method="POST" action="/">
+        <input type="file">
+    </form>
 </body>
-
 </html>

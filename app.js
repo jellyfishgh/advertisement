@@ -4,35 +4,17 @@ const path = require('path');
 const querystring = require('querystring');
 const url = require('url');
 const mime = require('./mime');
+const RouterManager = require('./RouterManager');
 
-const server = http.createServer((req, res) => {
-    const urlObj = url.parse(req.url);
-    const pathname = urlObj.pathname;
-    const queryObj = querystring.parse(urlObj.query);
-    // console.log(`pathname:${pathname}`);
-    // console.log(`query:${urlObj.query}`);
-    if (pathname === '/api/advert') {
-        const file = queryObj.source ? queryObj.source : queryObj.img;
-        const extName = file.slice(file.lastIndexOf('.'));
-        // console.log(`extName:${extName}`);        
-        res.writeHead(200, {
-            'Content-Type': mime[extName] ? mime[extName] : 'text/platin'
-        });
-        let rr;
-        if (queryObj.act === 'get_advert_source' && queryObj.source) {
-            rr = fs.createReadStream(path.join('public', queryObj.source));
-        } else if (queryObj.act === 'get_advert_image') {
-            rr = fs.createReadStream(path.join('public', `/${queryObj.game}/${queryObj.resolution}/${queryObj.img}`));
-        }
-        rr.pipe(res);
-    } else {
-        const body = 'no page';
-        res.writeHead(404, {
-            'Content-Type': 'text/plain',
-            'Content-Length': Buffer.byteLength(body)
-        });
-        res.end(body);
-    }
+const index = require('./router/index');
+const api = require('./router/api');
+
+const server = http.createServer((req, res) => {    
+    const rm = new RouterMangaer(req, res);
+    rm.register('/', index);
+    rm.register('/', index, 'POST');
+    rm.register('/api/advert', api);
+    rm.run();
 });
 server.listen(3000, 'localhost', () => {
     let address = server.address();
