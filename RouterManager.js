@@ -1,3 +1,5 @@
+const url = require('url');
+
 function RouterManager(req, res) {
     this.req = req;
     this.res = res;
@@ -7,22 +9,23 @@ function RouterManager(req, res) {
 RouterManager.prototype = {
     constructor: 'RouterManager',
     http_request_method: { 'GET': true, 'HEAD': true, 'POST': true, 'PUT': true, 'DELETE': true, 'TRACE': true, 'CONNECT': true },
-    register: function (path, route, method) {
-        if (!this.router[path]) this.router[path] = route.init(this.req, this.res, this);
-        if (!(method && http_request_method[method])) {
-            console.warn(`Invalid Http Request Method: ${method}`);
-            method = 'GET';
-        }
-        route.render(method);
+    register: function (pathname, route, method) {
+        if (!this.router[pathname]) this.router[pathname] = route.init(this.req, this.res, this);
+        // if (!(method && http_request_method[method])) {
+        //     console.warn(`Invalid Http Request Method: ${method}`);
+        //     method = 'GET';
+        // }
+        // route[method]();
     },
     run: function () {
         const urlObj = url.parse(this.req.url);
-        this.direct(urlObj.path);
+        this.direct(urlObj.pathname);
     },
-    direct: function (path) {
-        const route = this.router[path];
-        if (route && route.render[req.method]) {
-            route.render[req.method]();
+    direct: function (pathname) {        
+        const route = this.router[pathname];
+        if (route && route.render[this.req.method]) {
+            console.log(`${pathname} ${this.req.method}`);
+            route.render[this.req.method].apply(route);
         } else {
             this.err();
         }
