@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/jellyfishgh/advertisement#readme",
   "dependencies": {
+    "canvas": "^1.4.0",
     "jszip": "^3.0.0"
   }
 }
