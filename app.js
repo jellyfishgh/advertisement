@@ -10,10 +10,10 @@ const index = require('./router/index');
 const api = require('./router/api');
 
 const server = http.createServer((req, res) => {    
-    const rm = new RouterMangaer(req, res);
+    const rm = new RouterManager(req, res);
     rm.register('/', index);
     rm.register('/', index, 'POST');
-    rm.register('/api/advert', api);
+    rm.register('/api/advert/', api);
     rm.run();
 });
 server.listen(3000, 'localhost', () => {
