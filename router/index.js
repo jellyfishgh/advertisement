@@ -8,11 +8,10 @@ var router = new Router(
         return this;
     }, {
         'GET': function () {
-            console.log('...');
-            this.rm.direct('/api/advert/?act=get_get_advert_source&source=index.html');
-        },
-        'POST': function () {
-
+            this.res.writeHead(302, {
+                Location: '/api/advert?act=get_advert_source&source=index.html'
+            });
+            this.res.end();
         }
     }
 );

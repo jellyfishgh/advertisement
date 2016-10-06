@@ -8,23 +8,16 @@ function RouterManager(req, res) {
 
 RouterManager.prototype = {
     constructor: 'RouterManager',
-    http_request_method: { 'GET': true, 'HEAD': true, 'POST': true, 'PUT': true, 'DELETE': true, 'TRACE': true, 'CONNECT': true },
-    register: function (pathname, route, method) {
+    register: function (pathname, route) {
         if (!this.router[pathname]) this.router[pathname] = route.init(this.req, this.res, this);
-        // if (!(method && http_request_method[method])) {
-        //     console.warn(`Invalid Http Request Method: ${method}`);
-        //     method = 'GET';
-        // }
-        // route[method]();
     },
     run: function () {
         const urlObj = url.parse(this.req.url);
         this.direct(urlObj.pathname);
     },
-    direct: function (pathname) {        
+    direct: function (pathname) {
         const route = this.router[pathname];
         if (route && route.render[this.req.method]) {
-            console.log(`${pathname} ${this.req.method}`);
             route.render[this.req.method].apply(route);
         } else {
             this.err();
@@ -38,6 +31,6 @@ RouterManager.prototype = {
         });
         this.res.end(body);
     }
-}
+};
 
 module.exports = RouterManager;

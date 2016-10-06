@@ -2,11 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>index</title>
 </head>
 <body>
-    <form method="POST" action="/">
+    <form method="POST" action="/api/advert" enctype="multipart/form-data">
         <input type="file">
+        <input type="text" name = 'name'>
+        <input type='submit'>
     </form>
 </body>
 </html>

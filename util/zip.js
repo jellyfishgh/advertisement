@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const JSZip = require("jszip");
+const JSZip = require('jszip');
 
 module.exports = {
     compress: function (file, cb) {
