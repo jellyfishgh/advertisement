@@ -1,15 +1,115 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>index</title>
+    <style>
+        form {
+            border: 1px solid black;
+            margin: 20px auto;
+            padding: 5px;
+            width: 60%;
+        }
+    </style>
 </head>
+
 <body>
+    <!-- type为file时必须enctype使用multipart/form-data -->
     <form method="POST" action="/api/advert" enctype="multipart/form-data">
-        <input type="file">
-        <input type="text" name = 'name'>
+        <input type="file" name="infoFile">
+        <input type="text" name="username" placeholder="请输入用户名">
+        <input type="password" name="password" placeholder="请输入密码">
         <input type='submit'>
     </form>
+    <!-- 默认的表单提交时 enctype="" ,会对所有字符进行编码，空格转换成+ -->
+    <form method="POST" action="/api/advert">
+        <input type="text" name="username" placeholder="请输入用户名">
+        <input type="password" name="password" placeholder="请输入密码">
+        <input type='submit'>
+    </form>
+    <!-- ajax 提交表单，application/json -->
+    <form id='form1' action="/api/advert">
+        <fieldset>
+            <legend>登录</legend>
+            <input type="text" name="username" placeholder="请输入用户名">
+            <input type="password" name="password" placeholder="请输入密码">
+            <button>完成</button>
+        </fieldset>
+    </form>
+    <!-- ajax 提交 file -->
+    <form id='form2' action="/api/advert">
+        <input type="file" name="infoFile" multiple="multiple" accept="image/*">
+        <input type="text" name="username" placeholder="请输入用户名">
+        <input type="password" name="password" placeholder="请输入密码">
+        <button>完成</button>
+    </form>
+    <script>
+        function $(id) {
+            return document.getElementById(id);
+        }
+        var form1 = $('form1');
+        var form2 = $('form2');
+
+        function ajax(api, method, data, succeeded, failed) {
+            var xhr = new XMLHttpRequest();
+            xhr.timeout = 3000;
+            xhr.responseType = 'json';
+            xhr.open(method, api, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        succeeded(xhr.response);
+                    } else {
+                        failed(new Error('Unknown Error'));
+                    }
+                }
+            };
+            xhr.ontimeout = function() {
+                failed(new Error('Timeout Error'));
+            };
+            xhr.onerror = function(err) {
+                failed(err);
+            };
+            xhr.send(data);
+        }
+        form1.elements[form1.elements.length - 1].onclick = function(e) {
+            this.disabled = 'disabled';
+            // console.log(form1.elements);
+            // console.log(form1.elements.length);
+            // for(let key in form1.elements){
+            //     console.log(key);
+            //     if(form1.elements.hasOwnProperty(key)){
+            //         console.log(`${key} <<--`);
+            //     }
+            // }
+            // JS 的中括号操作符[] 既能使用数字索引访问，也能使用字符串数字访问
+            // var obj = {
+            //     '0': 'hello',
+            //     '1': 'hi'
+            // };
+            // console.log(`test --> ${obj[0]} , ${obj['1']} <--test`);
+            // var arr = ['hello', 'hi'];
+            // console.log(`test --> ${arr[0]} , ${arr['1']} <--test`);
+            var data = {};
+            Object.keys(form1.elements).map((key) => {
+                // form1.elements 这种类数组的对象（arguments同理）中间的数字索引也是字符串类型的key
+                if (isNaN(key)) {
+                    console.log(key);
+                    data[key] = form1.elements[key].value;
+                }
+            });
+            ajax(form1.action, 'POST', JSON.stringify(data), function(response) {
+                console.log(response);
+                console.log(typeof response);
+                e.target.disabled = false;
+            }, function(err) {
+                console.log(err);
+            });
+        };
+    </script>
 </body>
+
 </html>
